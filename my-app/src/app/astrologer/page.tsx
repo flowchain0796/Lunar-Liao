@@ -173,18 +173,16 @@ const Astrologer: React.FC = () => {
     const { abi } = contractAbi;
     const amount = 150;
     if (window.ethereum !== undefined) {
-
       const provider = new BrowserProvider(window.ethereum);
-
       const signer = await provider.getSigner();
       const address = await signer.getAddress();
-      const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
+      const bounceContract = new ethers.Contract(contractAddress.address, abi, signer);
 
       await (await bounceContract.mint(address, ethers.parseUnits(amount.toString(), 18))).wait();
+    } else {
+      console.error("No Ethereum provider found. Please install MetaMask or use a compatible wallet.");
     }
-
-  }
-
+  };
 
   const handleChatClick = (astrologer: Astrologer) => {
     setSelectedAstrologer(astrologer);
