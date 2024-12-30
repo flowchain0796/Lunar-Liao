@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserProvider, ethers } from 'ethers';
 import contractAddress from "../contractInfo/contractAddress.json"
 import contractAbi from "../contractInfo/contractAbi.json"
+import { ConnectButton } from 'thirdweb/react';
+import { client } from '../client';
 
 
 declare global {
@@ -268,7 +270,7 @@ const Astrologer: React.FC = () => {
               <Star className="w-6 h-6 text-purple-500" />
               Lunar Liáo
             </a>
-            {!walletConnected ? (
+            {/* {!walletConnected ? (
               <motion.button
                 className="px-6 py-2.5 bg-purple-500 hover:bg-purple-600 rounded-full text-white font-semibold text-sm shadow-lg shadow-purple-500/25 flex items-center gap-2"
                 whileHover={{ scale: 1.05 }}
@@ -282,7 +284,15 @@ const Astrologer: React.FC = () => {
               <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-sm font-medium hover:shadow-lg transition-shadow duration-300">
                 <span className="text-white text-xs">{walletAddress.slice(0, 5) + '...' + walletAddress.slice(-4)}</span>
               </div>
-            )}
+            )} */}
+            <ConnectButton
+            client={client}
+            appMetadata={{
+              name: "Example App",
+              url: "https://example.com",
+            }}
+            onConnect={() => connectWallet()} // Use the connectWallet function on successful connection
+          />
           </div>
         </div>
       </motion.nav>
