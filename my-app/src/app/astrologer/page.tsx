@@ -17,6 +17,7 @@ declare global {
       isMetaMask: boolean;
       request: (args: { method: string; params?: any[] }) => Promise<any>;
     };
+    okxwallet?: any;
   }
 }
 
@@ -172,15 +173,17 @@ const Astrologer: React.FC = () => {
     console.log(claimable, "====================")
     const { abi } = contractAbi;
     const amount = 150;
-    if (window.ethereum !== undefined) {
-      const provider = new BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
+    const provider = window.okxwallet || window.ethereum;
+
+    if (provider !== undefined) {
+      const browserProvider = new BrowserProvider(provider);
+      const signer = await browserProvider.getSigner();
       const address = await signer.getAddress();
       const bounceContract = new ethers.Contract(contractAddress.address, abi, signer);
 
       await (await bounceContract.mint(address, ethers.parseUnits(amount.toString(), 18))).wait();
     } else {
-      console.error("No Ethereum provider found. Please install MetaMask or use a compatible wallet.");
+      console.error("No Ethereum provider found. Please install MetaMask, OKX Wallet, or use a compatible wallet.");
     }
   };
 
