@@ -210,22 +210,19 @@ const Astrologer: React.FC = () => {
   const deposit = async () => {
     const { abi } = contractAbi;
     const charge = 1;
-    if (!window.ethereum) {
-      console.log("no wallet");
+    const provider = window.okxwallet || window.ethereum;
 
-    } else {
-
-
-      const provider = new BrowserProvider(window.ethereum);
-
-      const signer = await provider.getSigner();
+    if (provider !== undefined) {
+      const browserProvider = new BrowserProvider(provider);
+      const signer = await browserProvider.getSigner();
       const address = await signer.getAddress();
-      const bounceContract = new ethers.Contract(contractAddress.address, abi, signer)
+      const bounceContract = new ethers.Contract(contractAddress.address, abi, signer);
 
       await (await bounceContract.donate(address, "0x94A7Af5edB47c3B91d1B4Ffc2CA535d7aDA8CEDe", ethers.parseUnits(charge.toString(), 18))).wait();
+    } else {
+      console.error("No Ethereum provider found. Please install MetaMask, OKX Wallet, or use a compatible wallet.");
     }
-
-  }
+  };
 
   if (!mounted) return null;
 
